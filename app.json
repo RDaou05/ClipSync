@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "ClipSync",
-    "slug": "ClipSync",
+    "slug": "clipsync",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -15,16 +15,24 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.clipsync.ClipSync"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.clipsync.ClipSync"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "49f1a3eb-ba46-43f6-a29f-9d66f2e8d9d8"
+      }
+    },
+    "owner": "clipsync"
   }
 }
