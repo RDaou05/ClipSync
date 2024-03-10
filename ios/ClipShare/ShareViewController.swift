@@ -7,12 +7,73 @@
 
 import UIKit
 import Social
+import FirebaseCore
+import FirebaseFirestore
+import WebKit
 
-class ShareViewController: SLComposeServiceViewController {
+
+// @UIApplicationMain
+// class AppDelegate: UIResponder, UIApplicationDelegate {
+
+//   var window: UIWindow?
+
+//   func application(_ application: UIApplication,
+//     didFinishLaunchingWithOptions launchOptions:
+//                    [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+//     FirebaseApp.configure()
+
+//     return true
+//   }
+// }
+
+
+
+class ShareViewController: SLComposeServiceViewController, WKUIDelegate {
+    // @UIApplicationMain
+    // class AppDelegate: UIResponder, UIApplicationDelegate {
+
+    // var window: UIWindow?
+
+    // func application(_ application: UIApplication,
+    //     didFinishLaunchingWithOptions launchOptions:
+    //                 [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+    //     FirebaseApp.configure()
+
+    //     return true
+    // }
+    // }
+    var webView: WKWebView!
+    // FirebaseApp.configure()
+    // let db = Firestore.firestore()
+     
+
+    override func loadView() {
+        let webConfiguration = WKWebViewConfiguration()
+        webView = WKWebView(frame: .zero, configuration: webConfiguration)
+        webView.uiDelegate = self
+        view = webView
+    }
+
+
 
     override func isContentValid() -> Bool {
         // Do validation of contentText and/or NSExtensionContext attachments here
         return true
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // Load the JavaScript file directly
+        if let jsPath = Bundle.main.path(forResource: "functions", ofType: "js"),
+           let jsContent = try? String(contentsOfFile: jsPath) {
+            let script = WKUserScript(source: jsContent, injectionTime: .atDocumentStart, forMainFrameOnly: false)
+            webView.configuration.userContentController.addUserScript(script)
+        }
+        
+        // Call the JavaScript function from Swift
+        let jsFunctionCall = "myFunction();"
+        webView.evaluateJavaScript(jsFunctionCall, completionHandler: nil)
     }
 
     override func didSelectPost() {
@@ -26,6 +87,13 @@ class ShareViewController: SLComposeServiceViewController {
                         if let shareURL = url as? URL {
                             // Handle the shared URL (shareURL)
                             // You can use shareURL.absoluteString to get the URL string
+                            // let city = "Los Angeles"
+
+                            // do {
+                            //   try self.db.collection("cities").document("LA").setData(from: city)
+                            // } catch let error {
+                            // print("Error writing city to Firestore: \(error)")
+                            // }
                         }
                     })
                 }
