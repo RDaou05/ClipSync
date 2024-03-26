@@ -14,38 +14,36 @@ import Firebase
 import FirebaseFirestore
 
 
-@UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+// @UIApplicationMain
+// class AppDelegate: UIResponder, UIApplicationDelegate {
 
-//   var window: UIWindow?
+// //   var window: UIWindow?
 
-  func application(_ application: UIApplication,
-    didFinishLaunchingWithOptions launchOptions:
-                   [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-    FirebaseApp.configure()
+//   func application(_ application: UIApplication,
+//     didFinishLaunchingWithOptions launchOptions:
+//                    [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+//     FirebaseApp.configure()
 
-    return true
-  }
-}
+//     return true
+//   }
+// }
 
 
 
 class ShareViewController: SLComposeServiceViewController, {
-    // @UIApplicationMain
-    // class AppDelegate: UIResponder, UIApplicationDelegate {
+    @UIApplicationMain
+    class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    // var window: UIWindow?
+    //   var window: UIWindow?
 
-    // func application(_ application: UIApplication,
-    //     didFinishLaunchingWithOptions launchOptions:
-    //                 [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-    //     FirebaseApp.configure()
+    func application(_ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions:
+                    [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        FirebaseApp.configure()
 
-    //     return true
-    // }
-    // }
-    // FirebaseApp.configure()
-    // let db = Firestore.firestore()
+        return true
+    }
+    }
 
     override func isContentValid() -> Bool {
         // Do validation of contentText and/or NSExtensionContext attachments here
