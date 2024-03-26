@@ -1,6 +1,16 @@
 import firestore from "@react-native-firebase/firestore";
+import { NativeModules } from "react-native";
+const { ShareViewController } = NativeModules;
 
-const myFunction = () => {
-  const userDocument = firestore().collection("Users").doc("ABC");
+export const myFunction = () => {
+  firestore()
+    .collection("Users")
+    .add({
+      name: "Ada Lovelace",
+      age: 30,
+    })
+    .then(() => {
+      console.log("User added!");
+    });
   return "hi: ", userDocument;
 };
