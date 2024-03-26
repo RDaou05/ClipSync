@@ -28,7 +28,7 @@ import WebKit
 
 
 
-class ShareViewController: SLComposeServiceViewController, WKUIDelegate {
+class ShareViewController: SLComposeServiceViewController, {
     // @UIApplicationMain
     // class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -42,19 +42,8 @@ class ShareViewController: SLComposeServiceViewController, WKUIDelegate {
     //     return true
     // }
     // }
-    var webView: WKWebView!
     // FirebaseApp.configure()
     // let db = Firestore.firestore()
-     
-
-    override func loadView() {
-        let webConfiguration = WKWebViewConfiguration()
-        webView = WKWebView(frame: .zero, configuration: webConfiguration)
-        webView.uiDelegate = self
-        view = webView
-    }
-
-
 
     override func isContentValid() -> Bool {
         // Do validation of contentText and/or NSExtensionContext attachments here
@@ -63,17 +52,6 @@ class ShareViewController: SLComposeServiceViewController, WKUIDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Load the JavaScript file directly
-        if let jsPath = Bundle.main.path(forResource: "functions", ofType: "js"),
-           let jsContent = try? String(contentsOfFile: jsPath) {
-            let script = WKUserScript(source: jsContent, injectionTime: .atDocumentStart, forMainFrameOnly: false)
-            webView.configuration.userContentController.addUserScript(script)
-        }
-        
-        // Call the JavaScript function from Swift
-        let jsFunctionCall = "myFunction();"
-        webView.evaluateJavaScript(jsFunctionCall, completionHandler: nil)
     }
 
     override func didSelectPost() {
