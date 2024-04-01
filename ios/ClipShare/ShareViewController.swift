@@ -10,8 +10,9 @@ import Social
 import FirebaseCore
 import FirebaseFirestore
 import WebKit
-import Firebase
 import FirebaseFirestore
+import FirebaseAuth
+
 
 
 // @UIApplicationMain
@@ -30,7 +31,7 @@ import FirebaseFirestore
 
 
 
-class ShareViewController: SLComposeServiceViewController, {
+class ShareViewController: SLComposeServiceViewController {
     @UIApplicationMain
     class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -39,7 +40,9 @@ class ShareViewController: SLComposeServiceViewController, {
     func application(_ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions:
                     [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+
         FirebaseApp.configure()
+        
 
         return true
     }
@@ -51,46 +54,55 @@ class ShareViewController: SLComposeServiceViewController, {
     }
 
     override func viewDidLoad() {
+        FirebaseApp.configure()
+        
+        if let currentUser = Auth.auth().currentUser {
+            let userID = currentUser.uid
+            // Now you can use the userID as needed
+            print("User ID: \(userID)")
+        } else {
+            // User is not logged in
+            print("User is not logged in.")
+        }
         super.viewDidLoad()
     }
 
     override func didSelectPost() {
         // This is called after the user selects Post. Do the upload of contentText and/or NSExtensionContext attachments.
-        // if let item = extensionContext?.inputItems.first as? NSExtensionItem,
-        //    let attachments = item.attachments as? [NSItemProvider] {
+        if let item = extensionContext?.inputItems.first as? NSExtensionItem,
+           let attachments = item.attachments as? [NSItemProvider] {
             
-        //     for attachment in attachments {
-        //         if attachment.hasItemConformingToTypeIdentifier("public.url") {
-        //             attachment.loadItem(forTypeIdentifier: "public.url", options: nil, completionHandler: { (url, error) in
-        //                 if let shareURL = url as? URL {
-        //                     // Handle the shared URL (shareURL)
-        //                     // You can use shareURL.absoluteString to get the URL string
-        //                     // let city = "Los Angeles"
-
-        //                     // do {
-        //                     //   try self.db.collection("cities").document("LA").setData(from: city)
-        //                     // } catch let error {
-        //                     // print("Error writing city to Firestore: \(error)")
-        //                     // }
-        //                 }
-        //             })
-        //         }
-        //     }
-        // }
-        // Get a reference to your Firestore database
-        // Initialize Firestore
-        let db = Firestore.firestore()
-        
-        // Example: Add the video URL to a Firestore collection
-        db.collection("videos").addDocument(data: [
-            "videoURL": "videoURL.absoluteString"
-        ]) { error in
-            if let error = error {
-                print("Error adding document: \(error)")
-            } else {
-                print("Document added with ID: \(documentRef!.documentID)")
+            for attachment in attachments {
+                if attachment.hasItemConformingToTypeIdentifier("public.url") {
+                    attachment.loadItem(forTypeIdentifier: "public.url", options: nil, completionHandler: { (url, error) in
+                        if let shareURL = url as? URL {
+                            // Handle the shared URL (shareURL)
+                            // You can use shareURL.absoluteString to get the URL strings
+                            do {
+                              try  // Get a reference to your Firestore database
+                                // Initialize Firestore
+                                FirebaseApp.configure()
+                            
+                                let db = Firestore.firestore()
+                                // Example: Add the video URL to a Firestore collection
+                                db.collection("videos").addDocument(data: [
+                                    "videourl": shareURL.absoluteString
+                                ]) { error in
+                                    if let error = error {
+                                        print("Error adding document:")
+                                    } else {
+                                        print("Document added with ID:")
+                                    }
+                                }
+                            } catch let error {
+                            print("Error writing city to Firestore: \(error)")
+                            }
+                        }
+                    })
+                }
             }
         }
+
         // Inform the host that we're done, so it un-blocks its UI. Note: Alternatively you could call super's -didSelectPost, which will similarly complete the extension context.
         self.extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
     }
